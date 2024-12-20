@@ -1,12 +1,15 @@
+//loaded home page
 document.addEventListener("DOMContentLoaded", () => {
   showHomePage(); 
 });
+
 
 import { mapRawCocktailData } from './utilities.js';
 
 const navLinks = document.querySelectorAll('.nav-link');
 const content = document.querySelector('#content');
 
+// Navigation links
 navLinks.forEach(link => {
   link.addEventListener('click', (event) => {
     event.preventDefault();
@@ -17,7 +20,7 @@ navLinks.forEach(link => {
   });
 });
 
-
+// Fetch random cocktail from API
 async function fetchRandomCocktail() {
   const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php');
   const data = await response.json();
@@ -64,12 +67,14 @@ function showSearchPage() {
   });
 }
 
+// Fetch cocktails on a search query
 async function searchCocktails(query) {
   const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${query}`);
   const data = await response.json();
   return data.drinks.map(mapRawCocktailData);
 }
 
+// Display search results
 function displaySearchResults(results) {
   const resultsContainer = document.querySelector('#search-results');
   resultsContainer.innerHTML = results.map(cocktail => `
@@ -102,6 +107,7 @@ function displaySearchResults(results) {
 
 }
 
+// Show details page
 async function showDetailsPage(id) {
   try {
     const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
@@ -149,6 +155,7 @@ async function showDetailsPage(id) {
   }
 }
 
+// Show the favorites page
 function showFavoritesPage() {
   const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
   content.innerHTML = favorites.length > 0
@@ -178,6 +185,7 @@ function showFavoritesPage() {
   });
 }
 
+// Add a cocktail
 function addFavorite(cocktail) {
   const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
   if (!favorites.some(fav => fav.id === cocktail.id)) {
@@ -189,6 +197,7 @@ function addFavorite(cocktail) {
   }
 }
 
+// Remove a cocktail
 function removeFavorite(id) {
   const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
   const updatedFavorites = favorites.filter(fav => fav.id !== id);
